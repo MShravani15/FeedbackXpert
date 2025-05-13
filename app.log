@@ -1,0 +1,341 @@
+2025-04-29 01:07:36,006 - INFO - Initializing NLTK resources...
+2025-04-29 01:07:36,315 - INFO - NLTK resources initialized successfully
+2025-04-29 01:07:36,315 - INFO - Starting model loading process...
+2025-04-29 01:07:36,316 - INFO - Loading sentiment model from: model/sentiment_model2
+2025-04-29 01:07:36,449 - INFO - Sentiment model loaded successfully
+2025-04-29 01:07:36,449 - INFO - Loading emotion classification model...
+2025-04-29 01:07:37,585 - INFO - Emotion model loaded successfully
+2025-04-29 01:07:37,600 - INFO - Starting FeedbackXpert application
+2025-04-29 01:07:37,618 - WARNING -  * Debugger is active!
+2025-04-29 01:07:37,622 - INFO -  * Debugger PIN: 427-470-363
+2025-04-29 01:07:37,651 - INFO - Accessed index route
+2025-04-29 01:07:37,683 - INFO - 127.0.0.1 - - [29/Apr/2025 01:07:37] "GET / HTTP/1.1" 200 -
+2025-04-29 01:07:41,759 - INFO - Accessed login route with method: GET
+2025-04-29 01:07:41,767 - INFO - 127.0.0.1 - - [29/Apr/2025 01:07:41] "GET /login HTTP/1.1" 200 -
+2025-04-29 01:08:03,868 - INFO - Accessed dashboard route
+2025-04-29 01:08:03,895 - INFO - 127.0.0.1 - - [29/Apr/2025 01:08:03] "GET /dashboard HTTP/1.1" 200 -
+2025-04-29 01:08:04,022 - INFO - 127.0.0.1 - - [29/Apr/2025 01:08:04] "[36mGET /templates/dashboard.css HTTP/1.1[0m" 304 -
+2025-04-29 01:08:04,022 - INFO - 127.0.0.1 - - [29/Apr/2025 01:08:04] "[36mGET /templates/dashboard.js HTTP/1.1[0m" 304 -
+2025-04-29 01:08:06,017 - INFO - Accessed upload route via GET
+2025-04-29 01:08:06,017 - INFO - 127.0.0.1 - - [29/Apr/2025 01:08:06] "GET /upload HTTP/1.1" 200 -
+2025-04-29 01:08:15,343 - INFO - Received POST request to upload endpoint
+2025-04-29 01:08:15,347 - INFO - Processing uploaded file: Responses_2025-04-25 (1).xlsx
+2025-04-29 01:08:15,727 - INFO - Successfully read Excel file with 3 rows and 6 columns
+2025-04-29 01:08:15,737 - INFO - After cleaning: 3 rows remaining
+2025-04-29 01:08:15,738 - INFO - 
+Processing question: How would you rate the time allocated for mini project development?
+2025-04-29 01:08:15,740 - INFO - Determined question type: option
+2025-04-29 01:08:15,741 - INFO - Found 3 valid responses (from 3 total)
+2025-04-29 01:08:15,742 - INFO - Processing as multiple-choice question
+2025-04-29 01:08:15,743 - INFO - Completed processing for question: How would you rate the time allocated for mini project development?
+2025-04-29 01:08:15,745 - INFO - 
+Processing question: What suggestions do you have to improve mini project hours in the future?
+2025-04-29 01:08:15,746 - INFO - Determined question type: text
+2025-04-29 01:08:15,747 - INFO - Found 3 valid responses (from 3 total)
+2025-04-29 01:08:15,747 - INFO - Processing as open-ended text question
+2025-04-29 01:08:16,017 - INFO - Sentiment distribution: Counter({'Neutral': 2, 'Positive': 1})
+2025-04-29 01:08:16,017 - INFO - Analyzing emotions across 3 responses
+2025-04-29 01:08:16,216 - INFO - Final emotion counts: {'anger': 0, 'disgust': 0, 'fear': 0, 'joy': 0, 'neutral': 3, 'sadness': 0, 'surprise': 0}
+2025-04-29 01:08:16,216 - INFO - Emotion distribution: {'neutral': 3}
+2025-04-29 01:08:16,216 - INFO - Extracting keyphrases for question: What suggestions do you have to improve mini project hours in the future?
+2025-04-29 01:08:16,262 - INFO - Final keyphrases: ['requirements', 'knowing', 'high', 'productivity', 'help knowing']
+2025-04-29 01:08:16,263 - INFO - Generating wordcloud for: What suggestions do you have to improve mini project hours in the future?
+2025-04-29 01:08:16,862 - INFO - Completed processing for question: What suggestions do you have to improve mini project hours in the future?
+2025-04-29 01:08:16,862 - INFO - 
+Processing question: How can the faculty or mentors support you better during project work?
+2025-04-29 01:08:16,862 - INFO - Determined question type: text
+2025-04-29 01:08:16,862 - INFO - Found 3 valid responses (from 3 total)
+2025-04-29 01:08:16,862 - INFO - Processing as open-ended text question
+2025-04-29 01:08:16,997 - INFO - Sentiment distribution: Counter({'Neutral': 2, 'Positive': 1})
+2025-04-29 01:08:16,997 - INFO - Analyzing emotions across 3 responses
+2025-04-29 01:08:17,132 - INFO - Final emotion counts: {'anger': 0, 'disgust': 0, 'fear': 0, 'joy': 0, 'neutral': 3, 'sadness': 0, 'surprise': 0}
+2025-04-29 01:08:17,134 - INFO - Emotion distribution: {'neutral': 3}
+2025-04-29 01:08:17,134 - INFO - Extracting keyphrases for question: How can the faculty or mentors support you better during project work?
+2025-04-29 01:08:17,134 - INFO - Final keyphrases: ['weekly analysis', 'completely inclusing', 'help understand', 'better', 'give suggestions']
+2025-04-29 01:08:17,134 - INFO - Generating wordcloud for: How can the faculty or mentors support you better during project work?
+2025-04-29 01:08:17,750 - INFO - Completed processing for question: How can the faculty or mentors support you better during project work?
+2025-04-29 01:08:17,750 - INFO - Processed 3 questions successfully
+2025-04-29 01:08:17,765 - INFO - 127.0.0.1 - - [29/Apr/2025 01:08:17] "POST /upload HTTP/1.1" 200 -
+2025-04-29 01:16:09,695 - INFO - Accessed upload route via GET
+2025-04-29 01:16:09,695 - INFO - 127.0.0.1 - - [29/Apr/2025 01:16:09] "GET /upload HTTP/1.1" 200 -
+2025-04-29 01:16:12,457 - INFO - Accessed forms route
+2025-04-29 01:16:12,464 - INFO - 127.0.0.1 - - [29/Apr/2025 01:16:12] "GET /forms HTTP/1.1" 200 -
+2025-04-29 09:48:29,398 - INFO - Initializing NLTK resources...
+2025-04-29 09:48:29,715 - INFO - NLTK resources initialized successfully
+2025-04-29 09:48:29,715 - INFO - Starting model loading process...
+2025-04-29 09:48:29,715 - INFO - Loading sentiment model from: model/sentiment_model2
+2025-04-29 09:48:29,954 - INFO - Sentiment model loaded successfully
+2025-04-29 09:48:29,954 - INFO - Loading emotion classification model...
+2025-04-29 09:48:35,987 - WARNING - From C:\Users\musth\AppData\Local\Programs\Python\Python312\Lib\site-packages\tf_keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+
+2025-04-29 09:48:37,812 - INFO - Emotion model loaded successfully
+2025-04-29 09:48:37,819 - INFO - Starting FeedbackXpert application
+2025-04-29 09:48:37,872 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-29 09:48:37,872 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-29 09:48:37,876 - INFO -  * Restarting with stat
+2025-04-29 09:48:57,383 - INFO - Initializing NLTK resources...
+2025-04-29 09:48:57,570 - INFO - NLTK resources initialized successfully
+2025-04-29 09:48:57,570 - INFO - Starting model loading process...
+2025-04-29 09:48:57,570 - INFO - Loading sentiment model from: model/sentiment_model2
+2025-04-29 09:48:57,690 - INFO - Sentiment model loaded successfully
+2025-04-29 09:48:57,690 - INFO - Loading emotion classification model...
+2025-04-29 09:48:58,847 - INFO - Emotion model loaded successfully
+2025-04-29 09:48:58,854 - INFO - Starting FeedbackXpert application
+2025-04-29 09:48:58,872 - WARNING -  * Debugger is active!
+2025-04-29 09:48:58,872 - INFO -  * Debugger PIN: 427-470-363
+2025-04-29 09:50:40,521 - INFO -  * Detected change in 'E:\\FeedbackXpert_final\\app.py', reloading
+2025-04-29 09:50:42,476 - INFO -  * Restarting with stat
+2025-04-29 09:51:06,077 - INFO - Initializing NLTK resources...
+2025-04-29 09:51:06,368 - INFO - NLTK resources initialized successfully
+2025-04-29 09:51:06,368 - INFO - Starting model loading process...
+2025-04-29 09:51:06,370 - INFO - Loading sentiment model from: model/sentiment_model2
+2025-04-29 09:51:06,499 - INFO - Sentiment model loaded successfully
+2025-04-29 09:51:06,499 - INFO - Loading emotion classification model...
+2025-04-29 09:51:07,737 - INFO - Emotion model loaded successfully
+2025-04-29 09:51:07,741 - INFO - Starting FeedbackXpert application
+2025-04-29 09:51:07,757 - WARNING -  * Debugger is active!
+2025-04-29 09:51:07,765 - INFO -  * Debugger PIN: 427-470-363
+2025-04-29 09:51:07,805 - INFO - Accessed index route
+2025-04-29 09:51:07,886 - INFO - 127.0.0.1 - - [29/Apr/2025 09:51:07] "GET / HTTP/1.1" 200 -
+2025-04-29 09:51:07,975 - INFO - 127.0.0.1 - - [29/Apr/2025 09:51:07] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-29 09:51:41,587 - INFO - Accessed login route with method: GET
+2025-04-29 09:51:41,640 - INFO - 127.0.0.1 - - [29/Apr/2025 09:51:41] "GET /login HTTP/1.1" 200 -
+2025-04-29 09:51:43,943 - INFO - Accessed dashboard route
+2025-04-29 09:51:43,956 - INFO - 127.0.0.1 - - [29/Apr/2025 09:51:43] "GET /dashboard HTTP/1.1" 200 -
+2025-04-29 09:51:44,111 - INFO - 127.0.0.1 - - [29/Apr/2025 09:51:44] "[36mGET /templates/dashboard.css HTTP/1.1[0m" 304 -
+2025-04-29 09:51:44,171 - INFO - 127.0.0.1 - - [29/Apr/2025 09:51:44] "[36mGET /templates/dashboard.js HTTP/1.1[0m" 304 -
+2025-04-29 09:51:51,903 - INFO - Accessed upload route via GET
+2025-04-29 09:51:51,935 - INFO - 127.0.0.1 - - [29/Apr/2025 09:51:51] "GET /upload HTTP/1.1" 200 -
+2025-04-29 09:51:59,100 - INFO - Received POST request to upload endpoint
+2025-04-29 09:51:59,117 - INFO - Processing uploaded file: Responses_2025-04-25 (1).xlsx
+2025-04-29 09:52:00,001 - INFO - Successfully read Excel file with 3 rows and 6 columns
+2025-04-29 09:52:00,026 - INFO - After cleaning: 3 rows remaining
+2025-04-29 09:52:00,038 - INFO - 
+Processing question: How confident were you in understanding and completing your mini project?
+2025-04-29 09:52:00,038 - INFO - Determined question type: likert
+2025-04-29 09:52:00,038 - INFO - Found 3 valid responses (from 3 total)
+2025-04-29 09:52:00,044 - INFO - Processing as Likert-scale question
+2025-04-29 09:52:00,044 - WARNING - Likert processing failed, falling back to text: division by zero
+2025-04-29 09:52:00,052 - INFO - Processing as open-ended text question
+2025-04-29 09:52:00,500 - INFO - Sentiment distribution: Counter({'Positive': 2, 'Neutral': 1})
+2025-04-29 09:52:00,500 - INFO - Analyzing emotions across 3 responses
+2025-04-29 09:52:00,796 - INFO - Final emotion counts: {'anger': 0, 'disgust': 0, 'fear': 0, 'joy': 2, 'neutral': 0, 'sadness': 1, 'surprise': 0}
+2025-04-29 09:52:00,796 - INFO - Emotion distribution: {'joy': 2, 'sadness': 1}
+2025-04-29 09:52:00,800 - INFO - Extracting keyphrases for question: How confident were you in understanding and completing your mini project?
+2025-04-29 09:52:00,846 - INFO - Final keyphrases: ['confident somewhat', 'support somewhat', 'needed', 'somewhat', 'needed support']
+2025-04-29 09:52:00,846 - INFO - Generating wordcloud for: How confident were you in understanding and completing your mini project?
+2025-04-29 09:52:01,356 - INFO - Completed processing for question: How confident were you in understanding and completing your mini project?
+2025-04-29 09:52:01,356 - INFO - 
+Processing question: How would you rate the time allocated for mini project development?
+2025-04-29 09:52:01,356 - INFO - Determined question type: option
+2025-04-29 09:52:01,356 - INFO - Found 3 valid responses (from 3 total)
+2025-04-29 09:52:01,356 - INFO - Processing as multiple-choice question
+2025-04-29 09:52:01,356 - INFO - Completed processing for question: How would you rate the time allocated for mini project development?
+2025-04-29 09:52:01,356 - INFO - 
+Processing question: What challenges did you face during the mini project?
+2025-04-29 09:52:01,356 - INFO - Determined question type: text
+2025-04-29 09:52:01,367 - INFO - Found 3 valid responses (from 3 total)
+2025-04-29 09:52:01,367 - INFO - Processing as open-ended text question
+2025-04-29 09:52:01,495 - INFO - Sentiment distribution: Counter({'Neutral': 3})
+2025-04-29 09:52:01,495 - INFO - Analyzing emotions across 3 responses
+2025-04-29 09:52:01,618 - INFO - Final emotion counts: {'anger': 0, 'disgust': 0, 'fear': 0, 'joy': 0, 'neutral': 2, 'sadness': 1, 'surprise': 0}
+2025-04-29 09:52:01,618 - INFO - Emotion distribution: {'neutral': 2, 'sadness': 1}
+2025-04-29 09:52:01,618 - INFO - Extracting keyphrases for question: What challenges did you face during the mini project?
+2025-04-29 09:52:01,618 - INFO - Final keyphrases: ['confusion', 'time management', 'management', 'confusion project', 'time']
+2025-04-29 09:52:01,618 - INFO - Generating wordcloud for: What challenges did you face during the mini project?
+2025-04-29 09:52:02,116 - INFO - Completed processing for question: What challenges did you face during the mini project?
+2025-04-29 09:52:02,123 - INFO - 
+Processing question: What part of the mini project did you enjoy the most and why?
+2025-04-29 09:52:02,123 - INFO - Determined question type: text
+2025-04-29 09:52:02,124 - INFO - Found 3 valid responses (from 3 total)
+2025-04-29 09:52:02,124 - INFO - Processing as open-ended text question
+2025-04-29 09:52:02,305 - INFO - Sentiment distribution: Counter({'Positive': 2, 'Neutral': 1})
+2025-04-29 09:52:02,305 - INFO - Analyzing emotions across 3 responses
+2025-04-29 09:52:02,461 - INFO - Final emotion counts: {'anger': 0, 'disgust': 1, 'fear': 0, 'joy': 1, 'neutral': 1, 'sadness': 0, 'surprise': 0}
+2025-04-29 09:52:02,461 - INFO - Emotion distribution: {'disgust': 1, 'joy': 1, 'neutral': 1}
+2025-04-29 09:52:02,467 - INFO - Extracting keyphrases for question: What part of the mini project did you enjoy the most and why?
+2025-04-29 09:52:02,469 - INFO - Final keyphrases: ['week', 'giving 4 hours', 'exploring new technologies', 'class hours', 'giving hours']
+2025-04-29 09:52:02,469 - INFO - Generating wordcloud for: What part of the mini project did you enjoy the most and why?
+2025-04-29 09:52:03,026 - INFO - Completed processing for question: What part of the mini project did you enjoy the most and why?
+2025-04-29 09:52:03,026 - INFO - 
+Processing question: What suggestions do you have to improve mini project hours in the future?
+2025-04-29 09:52:03,026 - INFO - Determined question type: text
+2025-04-29 09:52:03,026 - INFO - Found 3 valid responses (from 3 total)
+2025-04-29 09:52:03,026 - INFO - Processing as open-ended text question
+2025-04-29 09:52:03,167 - INFO - Sentiment distribution: Counter({'Neutral': 2, 'Positive': 1})
+2025-04-29 09:52:03,167 - INFO - Analyzing emotions across 3 responses
+2025-04-29 09:52:03,300 - INFO - Final emotion counts: {'anger': 0, 'disgust': 0, 'fear': 0, 'joy': 0, 'neutral': 3, 'sadness': 0, 'surprise': 0}
+2025-04-29 09:52:03,300 - INFO - Emotion distribution: {'neutral': 3}
+2025-04-29 09:52:03,300 - INFO - Extracting keyphrases for question: What suggestions do you have to improve mini project hours in the future?
+2025-04-29 09:52:03,305 - INFO - Final keyphrases: ['knowing', 'high speed', 'requirements', 'help us', 'help knowing']
+2025-04-29 09:52:03,305 - INFO - Generating wordcloud for: What suggestions do you have to improve mini project hours in the future?
+2025-04-29 09:52:03,829 - INFO - Completed processing for question: What suggestions do you have to improve mini project hours in the future?
+2025-04-29 09:52:03,834 - INFO - 
+Processing question: How can the faculty or mentors support you better during project work?
+2025-04-29 09:52:03,834 - INFO - Determined question type: text
+2025-04-29 09:52:03,836 - INFO - Found 3 valid responses (from 3 total)
+2025-04-29 09:52:03,837 - INFO - Processing as open-ended text question
+2025-04-29 09:52:04,002 - INFO - Sentiment distribution: Counter({'Neutral': 2, 'Positive': 1})
+2025-04-29 09:52:04,002 - INFO - Analyzing emotions across 3 responses
+2025-04-29 09:52:04,141 - INFO - Final emotion counts: {'anger': 0, 'disgust': 0, 'fear': 0, 'joy': 0, 'neutral': 3, 'sadness': 0, 'surprise': 0}
+2025-04-29 09:52:04,141 - INFO - Emotion distribution: {'neutral': 3}
+2025-04-29 09:52:04,141 - INFO - Extracting keyphrases for question: How can the faculty or mentors support you better during project work?
+2025-04-29 09:52:04,147 - INFO - Final keyphrases: ['guiding', 'completely inclusing', 'weekly analysis', 'help understand', 'analysis help']
+2025-04-29 09:52:04,147 - INFO - Generating wordcloud for: How can the faculty or mentors support you better during project work?
+2025-04-29 09:52:04,861 - INFO - Completed processing for question: How can the faculty or mentors support you better during project work?
+2025-04-29 09:52:04,861 - INFO - Processed 6 questions successfully
+2025-04-29 09:52:04,951 - INFO - 127.0.0.1 - - [29/Apr/2025 09:52:04] "POST /upload HTTP/1.1" 200 -
+2025-04-29 09:52:24,646 - INFO - Accessed upload route via GET
+2025-04-29 09:52:24,659 - INFO - 127.0.0.1 - - [29/Apr/2025 09:52:24] "GET /upload HTTP/1.1" 200 -
+2025-04-29 09:52:31,136 - INFO - Received POST request to upload endpoint
+2025-04-29 09:52:31,143 - INFO - Processing uploaded file: sample_survey.xlsx
+2025-04-29 09:52:31,159 - INFO - Successfully read Excel file with 5 rows and 7 columns
+2025-04-29 09:52:31,169 - INFO - After cleaning: 5 rows remaining
+2025-04-29 09:52:31,169 - INFO - 
+Processing question: Name
+2025-04-29 09:52:31,169 - INFO - Determined question type: text
+2025-04-29 09:52:31,169 - INFO - Found 5 valid responses (from 5 total)
+2025-04-29 09:52:31,173 - INFO - Processing as open-ended text question
+2025-04-29 09:52:31,357 - INFO - Sentiment distribution: Counter({'Neutral': 5})
+2025-04-29 09:52:31,357 - INFO - Analyzing emotions across 5 responses
+2025-04-29 09:52:31,534 - INFO - Final emotion counts: {'anger': 0, 'disgust': 0, 'fear': 0, 'joy': 0, 'neutral': 5, 'sadness': 0, 'surprise': 0}
+2025-04-29 09:52:31,534 - INFO - Emotion distribution: {'neutral': 5}
+2025-04-29 09:52:31,542 - INFO - Extracting keyphrases for question: Name
+2025-04-29 09:52:31,542 - INFO - Final keyphrases: ['alice bob', 'charlie', 'david eva', 'bob charlie', 'alice']
+2025-04-29 09:52:31,542 - INFO - Generating wordcloud for: Name
+2025-04-29 09:52:32,016 - INFO - Completed processing for question: Name
+2025-04-29 09:52:32,016 - INFO - 
+Processing question: Email
+2025-04-29 09:52:32,024 - INFO - Determined question type: text
+2025-04-29 09:52:32,025 - INFO - Found 5 valid responses (from 5 total)
+2025-04-29 09:52:32,025 - INFO - Processing as open-ended text question
+2025-04-29 09:52:32,205 - INFO - Sentiment distribution: Counter({'Neutral': 5})
+2025-04-29 09:52:32,205 - INFO - Analyzing emotions across 5 responses
+2025-04-29 09:52:32,419 - INFO - Final emotion counts: {'anger': 0, 'disgust': 0, 'fear': 0, 'joy': 0, 'neutral': 5, 'sadness': 0, 'surprise': 0}
+2025-04-29 09:52:32,419 - INFO - Emotion distribution: {'neutral': 5}
+2025-04-29 09:52:32,419 - INFO - Extracting keyphrases for question: Email
+2025-04-29 09:52:32,426 - INFO - Final keyphrases: ['com david', 'charlie', 'alice example', 'example', 'charlie example']
+2025-04-29 09:52:32,426 - INFO - Generating wordcloud for: Email
+2025-04-29 09:52:32,869 - INFO - Completed processing for question: Email
+2025-04-29 09:52:32,869 - INFO - 
+Processing question: Hobbies
+2025-04-29 09:52:32,869 - INFO - Determined question type: text
+2025-04-29 09:52:32,869 - INFO - Found 5 valid responses (from 5 total)
+2025-04-29 09:52:32,869 - INFO - Processing as open-ended text question
+2025-04-29 09:52:33,066 - INFO - Sentiment distribution: Counter({'Neutral': 5})
+2025-04-29 09:52:33,066 - INFO - Analyzing emotions across 5 responses
+2025-04-29 09:52:33,252 - INFO - Final emotion counts: {'anger': 0, 'disgust': 0, 'fear': 0, 'joy': 0, 'neutral': 5, 'sadness': 0, 'surprise': 0}
+2025-04-29 09:52:33,254 - INFO - Emotion distribution: {'neutral': 5}
+2025-04-29 09:52:33,254 - INFO - Extracting keyphrases for question: Hobbies
+2025-04-29 09:52:33,255 - INFO - Final keyphrases: ['reading music', 'music sports', 'reading art', 'art travel', 'travel']
+2025-04-29 09:52:33,255 - INFO - Generating wordcloud for: Hobbies
+2025-04-29 09:52:33,666 - INFO - Completed processing for question: Hobbies
+2025-04-29 09:52:33,666 - INFO - 
+Processing question: Gender
+2025-04-29 09:52:33,666 - INFO - Determined question type: text
+2025-04-29 09:52:33,666 - INFO - Found 5 valid responses (from 5 total)
+2025-04-29 09:52:33,666 - INFO - Processing as open-ended text question
+2025-04-29 09:52:33,864 - INFO - Sentiment distribution: Counter({'Neutral': 5})
+2025-04-29 09:52:33,864 - INFO - Analyzing emotions across 5 responses
+2025-04-29 09:52:34,047 - INFO - Final emotion counts: {'anger': 0, 'disgust': 2, 'fear': 0, 'joy': 0, 'neutral': 3, 'sadness': 0, 'surprise': 0}
+2025-04-29 09:52:34,047 - INFO - Emotion distribution: {'disgust': 2, 'neutral': 3}
+2025-04-29 09:52:34,047 - INFO - Extracting keyphrases for question: Gender
+2025-04-29 09:52:34,052 - INFO - Final keyphrases: ['male male', 'male female', 'male', 'female', 'female male']
+2025-04-29 09:52:34,052 - INFO - Generating wordcloud for: Gender
+2025-04-29 09:52:34,422 - INFO - Completed processing for question: Gender
+2025-04-29 09:52:34,429 - INFO - 
+Processing question: Class
+2025-04-29 09:52:34,430 - INFO - Determined question type: text
+2025-04-29 09:52:34,430 - INFO - Found 5 valid responses (from 5 total)
+2025-04-29 09:52:34,430 - INFO - Processing as open-ended text question
+2025-04-29 09:52:34,650 - INFO - Sentiment distribution: Counter({'Neutral': 5})
+2025-04-29 09:52:34,650 - INFO - Analyzing emotions across 5 responses
+2025-04-29 09:52:34,871 - INFO - Final emotion counts: {'anger': 0, 'disgust': 0, 'fear': 0, 'joy': 0, 'neutral': 5, 'sadness': 0, 'surprise': 0}
+2025-04-29 09:52:34,879 - INFO - Emotion distribution: {'neutral': 5}
+2025-04-29 09:52:34,881 - INFO - Extracting keyphrases for question: Class
+2025-04-29 09:52:34,881 - INFO - Final keyphrases: ['12th 11th', '11th 10th', '10th', '11th', '10th 12th']
+2025-04-29 09:52:34,881 - INFO - Generating wordcloud for: Class
+2025-04-29 09:52:35,330 - INFO - Completed processing for question: Class
+2025-04-29 09:52:35,330 - INFO - 
+Processing question: Subjects
+2025-04-29 09:52:35,330 - INFO - Determined question type: text
+2025-04-29 09:52:35,330 - INFO - Found 5 valid responses (from 5 total)
+2025-04-29 09:52:35,330 - INFO - Processing as open-ended text question
+2025-04-29 09:52:35,547 - INFO - Sentiment distribution: Counter({'Neutral': 5})
+2025-04-29 09:52:35,547 - INFO - Analyzing emotions across 5 responses
+2025-04-29 09:52:35,747 - INFO - Final emotion counts: {'anger': 0, 'disgust': 0, 'fear': 0, 'joy': 0, 'neutral': 5, 'sadness': 0, 'surprise': 0}
+2025-04-29 09:52:35,747 - INFO - Emotion distribution: {'neutral': 5}
+2025-04-29 09:52:35,747 - INFO - Extracting keyphrases for question: Subjects
+2025-04-29 09:52:35,747 - INFO - Final keyphrases: ['history', 'science english', 'science math', 'history math', 'math science']
+2025-04-29 09:52:35,752 - INFO - Generating wordcloud for: Subjects
+2025-04-29 09:52:36,197 - INFO - Completed processing for question: Subjects
+2025-04-29 09:52:36,197 - INFO - 
+Processing question: Suggestions to improve the curriculum
+2025-04-29 09:52:36,197 - INFO - Determined question type: text
+2025-04-29 09:52:36,197 - INFO - Found 5 valid responses (from 5 total)
+2025-04-29 09:52:36,197 - INFO - Processing as open-ended text question
+2025-04-29 09:52:36,434 - INFO - Sentiment distribution: Counter({'Neutral': 3, 'Positive': 2})
+2025-04-29 09:52:36,434 - INFO - Analyzing emotions across 5 responses
+2025-04-29 09:52:36,639 - INFO - Final emotion counts: {'anger': 0, 'disgust': 0, 'fear': 0, 'joy': 1, 'neutral': 4, 'sadness': 0, 'surprise': 0}
+2025-04-29 09:52:36,639 - INFO - Emotion distribution: {'joy': 1, 'neutral': 4}
+2025-04-29 09:52:36,639 - INFO - Extracting keyphrases for question: Suggestions to improve the curriculum
+2025-04-29 09:52:36,648 - INFO - Final keyphrases: ['guest', 'introduce guest lectures', 'include', 'reduce syllabus', 'interactive classes needed']
+2025-04-29 09:52:36,648 - INFO - Generating wordcloud for: Suggestions to improve the curriculum
+2025-04-29 09:52:37,190 - INFO - Completed processing for question: Suggestions to improve the curriculum
+2025-04-29 09:52:37,190 - INFO - Processed 7 questions successfully
+2025-04-29 09:52:37,205 - INFO - 127.0.0.1 - - [29/Apr/2025 09:52:37] "POST /upload HTTP/1.1" 200 -
+2025-04-29 09:53:55,175 - INFO -  * Detected change in 'E:\\FeedbackXpert_final\\app.py', reloading
+2025-04-29 09:53:56,561 - INFO -  * Restarting with stat
+2025-04-29 09:54:08,463 - INFO - Initializing NLTK resources...
+2025-04-29 09:54:08,646 - INFO - NLTK resources initialized successfully
+2025-04-29 09:54:08,646 - INFO - Starting model loading process...
+2025-04-29 09:54:08,646 - INFO - Loading sentiment model from: model/sentiment_model2
+2025-04-29 09:54:08,705 - INFO - Sentiment model loaded successfully
+2025-04-29 09:54:08,705 - INFO - Loading emotion classification model...
+2025-04-29 09:54:09,583 - INFO - Emotion model loaded successfully
+2025-04-29 09:54:09,583 - INFO - Starting FeedbackXpert application
+2025-04-29 09:54:09,591 - WARNING -  * Debugger is active!
+2025-04-29 09:54:09,591 - INFO -  * Debugger PIN: 427-470-363
+2025-04-29 09:57:33,906 - INFO - Accessed upload route via GET
+2025-04-29 09:57:33,910 - INFO - 127.0.0.1 - - [29/Apr/2025 09:57:33] "GET /upload HTTP/1.1" 200 -
+2025-04-29 09:57:40,618 - INFO - Received POST request to upload endpoint
+2025-04-29 09:57:40,620 - INFO - Processing uploaded file: Responses_2025-04-25 (1).xlsx
+2025-04-29 09:57:42,057 - INFO - Successfully read Excel file with 3 rows and 6 columns
+2025-04-29 09:57:42,060 - INFO - After cleaning: 3 rows remaining
+2025-04-29 09:57:42,151 - INFO - 
+Processing question: How would you rate the time allocated for mini project development?
+2025-04-29 09:57:42,153 - INFO - Determined question type: option
+2025-04-29 09:57:42,153 - INFO - Found 3 valid responses (from 3 total)
+2025-04-29 09:57:42,153 - INFO - Processing as multiple-choice question
+2025-04-29 09:57:42,153 - INFO - Completed processing for question: How would you rate the time allocated for mini project development?
+2025-04-29 09:57:42,154 - INFO - 
+Processing question: What suggestions do you have to improve mini project hours in the future?
+2025-04-29 09:57:42,154 - INFO - Determined question type: text
+2025-04-29 09:57:42,155 - INFO - Found 3 valid responses (from 3 total)
+2025-04-29 09:57:42,156 - INFO - Processing as open-ended text question
+2025-04-29 09:57:42,462 - INFO - Sentiment distribution: Counter({'Neutral': 2, 'Positive': 1})
+2025-04-29 09:57:42,463 - INFO - Analyzing emotions across 3 responses
+2025-04-29 09:57:42,655 - INFO - Final emotion counts: {'anger': 0, 'disgust': 0, 'fear': 0, 'joy': 0, 'neutral': 3, 'sadness': 0, 'surprise': 0}
+2025-04-29 09:57:42,657 - INFO - Emotion distribution: {'neutral': 3}
+2025-04-29 09:57:42,657 - INFO - Extracting keyphrases for question: What suggestions do you have to improve mini project hours in the future?
+2025-04-29 09:57:42,785 - INFO - Final keyphrases: ['knowing', 'mistakes etcc', 'training', 'help knowing', 'high']
+2025-04-29 09:57:42,785 - INFO - Generating wordcloud for: What suggestions do you have to improve mini project hours in the future?
+2025-04-29 09:57:43,227 - INFO - Completed processing for question: What suggestions do you have to improve mini project hours in the future?
+2025-04-29 09:57:43,228 - INFO - 
+Processing question: How can the faculty or mentors support you better during project work?
+2025-04-29 09:57:43,229 - INFO - Determined question type: text
+2025-04-29 09:57:43,229 - INFO - Found 3 valid responses (from 3 total)
+2025-04-29 09:57:43,230 - INFO - Processing as open-ended text question
+2025-04-29 09:57:43,440 - INFO - Sentiment distribution: Counter({'Neutral': 2, 'Positive': 1})
+2025-04-29 09:57:43,440 - INFO - Analyzing emotions across 3 responses
+2025-04-29 09:57:43,631 - INFO - Final emotion counts: {'anger': 0, 'disgust': 0, 'fear': 0, 'joy': 0, 'neutral': 3, 'sadness': 0, 'surprise': 0}
+2025-04-29 09:57:43,643 - INFO - Emotion distribution: {'neutral': 3}
+2025-04-29 09:57:43,644 - INFO - Extracting keyphrases for question: How can the faculty or mentors support you better during project work?
+2025-04-29 09:57:43,646 - INFO - Final keyphrases: ['project completely inclusing', 'give suggestions', 'completely inclusing', 'completely', 'better']
+2025-04-29 09:57:43,647 - INFO - Generating wordcloud for: How can the faculty or mentors support you better during project work?
+2025-04-29 09:57:44,198 - INFO - Completed processing for question: How can the faculty or mentors support you better during project work?
+2025-04-29 09:57:44,199 - INFO - Processed 3 questions successfully
+2025-04-29 09:57:44,326 - INFO - 127.0.0.1 - - [29/Apr/2025 09:57:44] "POST /upload HTTP/1.1" 200 -
+2025-04-29 09:58:19,099 - INFO -  * Detected change in 'E:\\FeedbackXpert_final\\app.py', reloading
+2025-04-29 09:58:20,277 - INFO -  * Restarting with stat
