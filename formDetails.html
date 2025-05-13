@@ -1,0 +1,566 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Form Details - FeedbackXpert</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .question-box {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    .question-header {
+      background-color: #f0f0f0;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .required-star {
+      color: red;
+    }
+    .badge {
+      font-size: 0.8rem;
+    }
+    .rating-stars {
+      color: gold;
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <div id="form-details"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      getDocs,
+      query,
+      where
+    } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+
+    import * as XLSX from "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/+esm";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDR3bpYN3tVSn3a-cYXlqnCSZSve8abKq0",
+      authDomain: "feedbackxpert-86d7c.firebaseapp.com",
+      projectId: "feedbackxpert-86d7c",
+      storageBucket: "feedbackxpert-86d7c.appspot.com",
+      messagingSenderId: "859190774604",
+      appId: "1:859190774604:web:e225ace4e28e784d9d5de9",
+      measurementId: "G-HWMRT75G17"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const formDetailsContainer = document.getElementById("form-details");
+    const urlParams = new URLSearchParams(window.location.search);
+    const formId = urlParams.get("id");
+
+    if (formId) {
+      loadFormDetails(formId);
+    } else {
+      formDetailsContainer.innerHTML = "<p>Invalid form ID.</p>";
+    }
+
+    async function loadFormDetails(formId) {
+      try {
+        // Get form details
+        const formRef = doc(db, "form", formId);
+        const formSnap = await getDoc(formRef);
+
+        if (!formSnap.exists()) {
+          formDetailsContainer.innerHTML = "<p>Error: Form not found.</p>";
+          return;
+        }
+
+        const formData = formSnap.data();
+        const { formTitle = "Untitled Form", formDescription = "", questions = [] } = formData;
+
+        // Get all responses for this form
+        const responsesRef = collection(db, "responses");
+        const q = query(responsesRef, where("formId", "==", formId));
+        const responseSnap = await getDocs(q);
+        const responses = responseSnap.docs.map(doc => doc.data());
+        
+        // Store for Excel download
+        window.responses = responses;
+        window.questions = questions;
+
+        // Generate HTML for each question
+        let questionHTML = questions.map((question, index) => {
+          // Ensure we have default values for required fields
+          const questionText = question.questionText || "Untitled Question";
+          const questionType = question.questionType || 'text';
+          const isRequired = question.required || false;
+          const options = question.options || [];
+          
+          const label = `${index + 1}. ${questionText}${isRequired ? ' <span class="required-star">*</span>' : ''}`;
+          const typeBadge = `<span class="badge bg-secondary">${questionType}</span>`;
+          let optionsHTML = "";
+
+          // Handle different question types
+          switch(questionType.toLowerCase()) {
+            case "multiplechoice":
+            case "radio":
+              optionsHTML = renderRadioOptions(question, responses);
+              break;
+            case "checkbox":
+              optionsHTML = renderCheckboxOptions(question, responses);
+              break;
+            case "rating":
+            case "scale":
+              optionsHTML = renderRatingOptions(question, responses);
+              break;
+            case "file":
+            case "upload":
+              optionsHTML = renderFileUploadOptions(responses, questionText);
+              break;
+            case "text":
+            case "textarea":
+            case "shorttext":
+              optionsHTML = renderTextOptions(responses, questionText);
+              break;
+            default:
+              // Fallback to text input for unknown types
+              console.warn(`Unknown question type: ${questionType}, falling back to text input`);
+              optionsHTML = renderTextOptions(responses, questionText);
+          }
+
+          return `
+            <div class="question-box">
+              <div class="question-header">
+                <strong>${label}</strong>
+                ${typeBadge}
+              </div>
+              ${optionsHTML}
+            </div>
+          `;
+        }).join("");
+
+        formDetailsContainer.innerHTML = `
+          <div class="card p-4 shadow">
+            <h2>${formTitle}</h2>
+            <p>${formDescription}</p>
+            <p><strong>Total Responses:</strong> ${responseSnap.size}</p>
+            <h4 class="mt-4">Form Questions</h4>
+            ${questionHTML}
+            <button class="btn btn-success mt-3" onclick="downloadAsExcel()">Download Responses as Excel</button>
+          </div>
+        `;
+      } catch (error) {
+        console.error("Error loading form details:", error);
+        formDetailsContainer.innerHTML = "<p>Error loading form details.</p>";
+      }
+    }
+
+    function renderRadioOptions(question, responses) {
+      const optionCounts = {};
+      const options = question.options || [];
+      
+      options.forEach(opt => optionCounts[opt] = 0);
+      
+      responses.forEach(res => {
+        const ans = res[question.questionText];
+        if (ans && optionCounts[ans] !== undefined) {
+          optionCounts[ans]++;
+        }
+      });
+
+      const total = responses.length || 1;
+      return options.map(opt => {
+        const percent = Math.round((optionCounts[opt] || 0) / total * 100);
+        return `    
+          <div class="form-check">
+            <input class="form-check-input" type="radio" disabled />
+            <label class="form-check-label">${opt} (${percent}%)</label>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderCheckboxOptions(question, responses) {
+      const optionCounts = {};
+      const options = question.options || [];
+      
+      options.forEach(opt => optionCounts[opt] = 0);
+      
+      responses.forEach(res => {
+        const ans = res[question.questionText];
+        if (Array.isArray(ans)) {
+          ans.forEach(opt => {
+            if (optionCounts[opt] !== undefined) optionCounts[opt]++;
+          });
+        }
+      });
+
+      const total = responses.length || 1;
+      return options.map(opt => {
+        const percent = Math.round((optionCounts[opt] || 0) / total * 100);
+        return `    
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" disabled />
+            <label class="form-check-label">${opt} (${percent}%)</label>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderRatingOptions(question, responses) {
+      // Calculate average rating
+      let total = 0;
+      let count = 0;
+      responses.forEach(res => {
+        const rating = parseInt(res[question.questionText]);
+        if (!isNaN(rating)) {
+          total += rating;
+          count++;
+        }
+      });
+      
+      const avgRating = count > 0 ? (total / count).toFixed(1) : "No ratings";
+      
+      // Display stars based on average
+      const fullStars = Math.floor(avgRating);
+      const hasHalfStar = avgRating % 1 >= 0.5;
+      
+      let starsHTML = "";
+      for (let i = 0; i < 5; i++) {
+        if (i < fullStars) {
+          starsHTML += '<span class="rating-stars">★</span>';
+        } else if (i === fullStars && hasHalfStar) {
+          starsHTML += '<span class="rating-stars">½</span>';
+        } else {
+          starsHTML += '<span class="rating-stars">☆</span>';
+        }
+      }
+      
+      return `
+        <div class="mb-2">${starsHTML}</div>
+        <div>Average Rating: ${avgRating} (${count} responses)</div>
+      `;
+    }
+
+    function renderFileUploadOptions(responses, questionText) {
+      const fileResponses = responses
+        .map(res => res[questionText])
+        .filter(file => file);
+      
+      if (fileResponses.length === 0) {
+        return "<p>No files uploaded</p>";
+      }
+      
+      return `
+        <p>${fileResponses.length} file(s) uploaded:</p>
+        <ul>
+          ${fileResponses.map(file => `<li><a href="${file}" target="_blank">Download File</a></li>`).join("")}
+        </ul>
+      `;
+    }
+
+    function renderTextOptions(responses, questionText) {
+      const textResponses = responses
+        .map(res => res[questionText])
+        .filter(text => text && text.trim() !== "");
+      
+      if (textResponses.length === 0) {
+        return "<p>No text responses</p>";
+      }
+      
+      // Show a few sample responses
+      const sampleCount = Math.min(3, textResponses.length);
+      return `
+        <p>${textResponses.length} text response(s). Sample responses:</p>
+        <ul>
+          ${textResponses.slice(0, sampleCount).map(text => `<li>${text}</li>`).join("")}
+        </ul>
+      `;
+    }
+
+    window.downloadAsExcel = async function () {
+      if (!window.questions) return alert("No form questions found.");
+      
+      try {
+        // Get all responses again to ensure we have the latest data
+        const responsesRef = collection(db, "responses");
+        const q = query(responsesRef, where("formId", "==", formId));
+        const responseSnap = await getDocs(q);
+        const responses = responseSnap.docs.map(doc => doc.data());
+
+        if (responses.length === 0) {
+          alert("No responses to export.");
+          return;
+        }
+
+        // Prepare headers (question texts)
+        const headers = window.questions.map(q => q.questionText || "Untitled Question");
+        
+        // Prepare rows (responses)
+        const rows = responses.map(response => {
+          return window.questions.map(question => {
+            const answer = response[question.questionText];
+            
+            // Format different answer types appropriately
+            if (Array.isArray(answer)) {
+              return answer.join(", "); // For checkbox answers
+            } else if (answer === undefined || answer === null) {
+              return ""; // For unanswered questions
+            } else {
+              return answer.toString(); // For other types
+            }
+          });
+        });
+
+        // Create worksheet
+        const worksheetData = [headers, ...rows];
+        const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Responses");
+
+        // Generate filename with form title if available
+        let filename = "FormResponses";
+        const formRef = doc(db, "form", formId);
+        const formSnap = await getDoc(formRef);
+        if (formSnap.exists()) {
+          const formData = formSnap.data();
+          filename = formData.formTitle ? formData.formTitle.replace(/\s+/g, '_') : "FormResponses";
+        }
+
+        XLSX.writeFile(workbook, `${filename}_${new Date().toISOString().split('T')[0]}.xlsx`);
+      } catch (error) {
+        console.error("Error exporting to Excel:", error);
+        alert("Error exporting responses. Please try again.");
+      }
+    };
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Form Details - FeedbackXpert</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .question-box {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    .question-header {
+      background-color: #f0f0f0;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .required-star {
+      color: red;
+    }
+    .badge {
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <div id="form-details"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      getDocs,
+      query,
+      where
+    } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+
+    import * as XLSX from "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/+esm";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDR3bpYN3tVSn3a-cYXlqnCSZSve8abKq0",
+      authDomain: "feedbackxpert-86d7c.firebaseapp.com",
+      projectId: "feedbackxpert-86d7c",
+      storageBucket: "feedbackxpert-86d7c.appspot.com",
+      messagingSenderId: "859190774604",
+      appId: "1:859190774604:web:e225ace4e28e784d9d5de9",
+      measurementId: "G-HWMRT75G17"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const formDetailsContainer = document.getElementById("form-details");
+    const urlParams = new URLSearchParams(window.location.search);
+    const formId = urlParams.get("id");
+
+    if (formId) {
+      loadFormDetails(formId);
+    } else {
+      formDetailsContainer.innerHTML = "<p>Invalid form ID.</p>";
+    }
+
+    async function loadFormDetails(formId) {
+      try {
+        const formRef = doc(db, "form", formId);
+        const formSnap = await getDoc(formRef);
+
+        if (!formSnap.exists()) {
+          formDetailsContainer.innerHTML = "<p>Error: Form not found.</p>";
+          return;
+        }
+
+        const formData = formSnap.data();
+        const { formTitle = "Untitled Form", formDescription = "", questions = [] } = formData;
+
+        const q = query(collection(db, "responses"), where("formId", "==", formId));
+        const responseSnap = await getDocs(q);
+        const responses = responseSnap.docs.map(doc => doc.data());
+        window.responses = responses;
+        window.questions = questions;
+
+        let questionHTML = questions.map((question, index) => {
+          const questionText = question.questionText || "Untitled Question";
+          const questionType = question.questionType || 'text';
+          const isRequired = question.required || false;
+          const options = question.options || [];
+          
+          const label = `${index + 1}. ${questionText}${isRequired ? ' <span class="required-star">*</span>' : ''}`;
+          const typeBadge = `<span class="badge bg-secondary">${questionType}</span>`;
+          let optionsHTML = "";
+
+          switch(questionType.toLowerCase()) {
+            case "multiplechoice":
+            case "radio":
+              optionsHTML = options.map(opt => `
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" disabled />
+                  <label class="form-check-label">${opt}</label>
+                </div>
+              `).join("");
+              break;
+              
+            case "checkbox":
+              optionsHTML = options.map(opt => `
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" disabled />
+                  <label class="form-check-label">${opt}</label>
+                </div>
+              `).join("");
+              break;
+              
+            case "rating":
+              optionsHTML = `<div class="form-control">⭐⭐⭐⭐⭐</div>`;
+              break;
+              
+            case "file":
+              optionsHTML = `<input type="file" class="form-control" disabled />`;
+              break;
+              
+            case "text":
+            default:
+              optionsHTML = `<input type="text" class="form-control" disabled placeholder="Text response" />`;
+          }
+
+          return `
+            <div class="question-box">
+              <div class="question-header">
+                <strong>${label}</strong>
+                ${typeBadge}
+              </div>
+              ${optionsHTML}
+            </div>
+          `;
+        }).join("");
+
+        formDetailsContainer.innerHTML = `
+          <div class="card p-4 shadow">
+            <h2>${formTitle}</h2>
+            <p>${formDescription}</p>
+            <p><strong>Total Responses:</strong> ${responseSnap.size}</p>
+            <h4 class="mt-4">Form Questions</h4>
+            ${questionHTML}
+            <button class="btn btn-success mt-3" onclick="downloadAsExcel()">Download Responses as Excel</button>
+          </div>
+        `;
+      } catch (error) {
+        console.error("Error loading form details:", error);
+        formDetailsContainer.innerHTML = "<p>Error loading form details.</p>";
+      }
+    }
+
+    window.downloadAsExcel = function() {
+  console.log("%cEXPORT FUNCTION STARTED", "color: blue; font-size: 16px;");
+
+  if (!window.questions || !window.responses) {
+    console.error("Data missing!");
+    return;
+  }
+
+  // 1. Create headers
+  const headers = window.questions.map(q => q.questionText || "Untitled");
+  
+  // 2. Create question ID to column index mapping
+  const questionIdMap = {};
+  window.questions.forEach((q, i) => {
+    questionIdMap[q.questionId] = i;
+  });
+
+  // 3. Process responses - KEY FIX: Look in response.responses
+  const rows = window.responses.map(response => {
+    const row = new Array(headers.length).fill("");
+    
+    // Get the nested responses object
+    const responseData = response.responses || {};
+    
+    Object.entries(responseData).forEach(([key, value]) => {
+      const colIndex = questionIdMap[key];
+      if (colIndex !== undefined) {
+        row[colIndex] = formatValue(value);
+      }
+    });
+    
+    return row;
+  });
+
+  // 4. Create Excel
+  const worksheet = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Responses");
+  XLSX.writeFile(workbook, `Responses_${new Date().toISOString().split('T')[0]}.xlsx`);
+};
+
+function formatValue(value) {
+  if (value == null) return "";
+  if (Array.isArray(value)) return value.join(", ");
+  return String(value);
+}
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

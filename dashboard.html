@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FeedbackXpert - Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/templates/dashboard.css">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+  <!-- SheetJS for Excel parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <i class="bi bi-chat-square-text me-2"></i>FeedbackXpert
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="{{ url_for('dashboard') }}" >
+              <i class="bi bi-house-door"></i> Home
+            </a>
+          </li>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('forms') }}" id="feedbackFormsLink">
+              <i class="bi bi-list-check"></i> Feedback Forms
+            </a>
+          </li>
+          
+          
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('login') }}" id="logoutLink">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+          </li> -->
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <h1>Welcome to FeedbackXpert</h1>
+      <p class="lead">The intelligent text mining system that transforms raw feedback into actionable insights using advanced NLP technology</p>
+      <div class="cta-buttons">
+        <a href="{{ url_for('feedback') }}" class="btn btn-light btn-lg">
+          <i class="bi bi-plus-circle"></i> Create New Feedback Form
+        </a>
+        <a href="{{ url_for('upload') }}" class="btn btn-outline-light btn-lg" id="excelUploadBtn">
+          <i class="bi bi-upload"></i> Upload Excel Sheet
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- App Description Section -->
+  <section class="description-section bg-light py-5">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h2 class="mb-4">About FeedbackXpert</h2>
+          <p class="lead">FeedbackXpert is an AI-powered text analysis platform designed to help organizations understand their customer feedback at scale.</p>
+          <p>Our system uses state-of-the-art Natural Language Processing (NLP) techniques, including BERT-based models, to automatically analyze textual feedback and extract meaningful insights. Unlike traditional methods that require manual review, FeedbackXpert provides instant analysis with:</p>
+          <ul class="features-list">
+            <li><i class="bi bi-check-circle-fill text-primary"></i> Sentiment detection (Positive/Negative/Neutral)</li>
+            <li><i class="bi bi-check-circle-fill text-primary"></i> Emotion recognition (Frustration, Satisfaction, Excitement)</li>
+            <li><i class="bi bi-check-circle-fill text-primary"></i> Automatic text categorization</li>
+            <li><i class="bi bi-check-circle-fill text-primary"></i> Key phrase and topic extraction</li>
+          </ul>
+        </div>
+        <div class="col-lg-6">
+          <img src="https://www.sparklinglogic.com/wp-content/uploads/2023/03/image-data-centric.png" alt="Feedback analysis illustration" class="img-fluid rounded shadow">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section py-5">
+    <div class="container">
+      <h2 class="text-center mb-5">Key Features</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="feature-card p-4 h-100 rounded shadow-sm">
+            <div class="feature-icon mb-3">
+              <i class="bi bi-lightning-charge text-primary fs-1"></i>
+            </div>
+            <h3>Real-Time Analysis</h3>
+            <p>Get instant insights as feedback comes in, with no waiting for batch processing.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card p-4 h-100 rounded shadow-sm">
+            <div class="feature-icon mb-3">
+              <i class="bi bi-emoji-smile text-primary fs-1"></i>
+            </div>
+            <h3>Advanced Sentiment Analysis</h3>
+            <p>Our BERT-based models provide more accurate sentiment detection than traditional methods.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card p-4 h-100 rounded shadow-sm">
+            <div class="feature-icon mb-3">
+              <i class="bi bi-heart text-primary fs-1"></i>
+            </div>
+            <h3>Emotion Detection</h3>
+            <p>Identify underlying emotions like frustration, satisfaction, or excitement in responses.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card p-4 h-100 rounded shadow-sm">
+            <div class="feature-icon mb-3">
+              <i class="bi bi-file-excel text-primary fs-1"></i>
+            </div>
+            <h3>Excel Integration</h3>
+            <p>Upload existing feedback data in Excel format for instant analysis without complex imports.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card p-4 h-100 rounded shadow-sm">
+            <div class="feature-icon mb-3">
+              <i class="bi bi-bar-chart-line text-primary fs-1"></i>
+            </div>
+            <h3>Interactive Visualizations</h3>
+            <p>Explore your data with dynamic charts, word clouds, and customizable dashboards.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card p-4 h-100 rounded shadow-sm">
+            <div class="feature-icon mb-3">
+              <i class="bi bi-shield-lock text-primary fs-1"></i>
+            </div>
+            <h3>Privacy Focused</h3>
+            <p>We never store personal respondent data, ensuring complete anonymity.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases Section -->
+  <section class="usecases-section bg-light py-5">
+    <div class="container">
+      <h2 class="text-center mb-5">Who Can Benefit?</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="usecase-card p-4 h-100 rounded shadow-sm">
+            <h3><i class="bi bi-building text-primary me-2"></i> Businesses</h3>
+            <p>Understand customer satisfaction, identify pain points, and improve products/services based on real feedback.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="usecase-card p-4 h-100 rounded shadow-sm">
+            <h3><i class="bi bi-mortarboard text-primary me-2"></i> Educators</h3>
+            <p>Analyze course evaluations and student feedback to enhance teaching methods and curriculum.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="usecase-card p-4 h-100 rounded shadow-sm">
+            <h3><i class="bi bi-calendar-event text-primary me-2"></i> Event Organizers</h3>
+            <p>Gather and analyze attendee feedback to improve future events and measure satisfaction.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer bg-dark text-white py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5><i class="bi bi-chat-square-text"></i> FeedbackXpert</h5>
+          <p>The intelligent text mining system for actionable insights.</p>
+        </div>
+        <div class="col-md-3">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="{{ url_for('dashboard') }}" class="text-white">Home</a></li>
+            <li><a href="{{ url_for('forms') }}" class="text-white">Feedback Forms</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h5>Contact</h5>
+          <ul class="list-unstyled">
+            <li><i class="bi bi-envelope"></i> support@feedbackxpert.com</li>
+            <li><i class="bi bi-phone"></i> +1 (555) 123-4567</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="my-3">
+      <div class="text-center">
+        <p class="mb-0">&copy; 2023 FeedbackXpert. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/templates/dashboard.js"></script>
+</body>
+</html>

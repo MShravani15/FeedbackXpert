@@ -1,5 +1,12 @@
 {
-  "projects": {
-    "default": "feedbackxpert-86d7c"
+    "projects": {
+      "default": "feedbackxpert-86d7c"
+    },
+    "targets": {
+      "feedbackxpert-86d7c": {
+        "hosting": {
+          "default": ["feedbackxpert-86d7c"]
+        }
+      }
+    }
   }
-}

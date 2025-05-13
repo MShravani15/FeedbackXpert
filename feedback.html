@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FeedbackXpert - Form Builder</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <style>
+    :root {
+      --primary: #2575fc;
+      --primary-dark: #1a5bbf;
+      --light-bg: #f8f9fa;
+      --border-radius: 8px;
+    }
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: var(--light-bg);
+    }
+    .form-builder-container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 30px;
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    .form-header {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .form-header h1 {
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .question-card {
+      background: white;
+      border-radius: var(--border-radius);
+      border: 1px solid #e0e0e0;
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+    .question-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 2px 10px rgba(37, 117, 252, 0.1);
+    }
+    .question-card .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .question-card .question-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .question-card .question-actions button {
+      background: none;
+      border: none;
+      color: #666;
+      cursor: pointer;
+    }
+    .question-card .question-actions button:hover {
+      color: var(--primary);
+    }
+    .option-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .option-item input {
+      flex: 1;
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+    }
+    .btn-outline-primary {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .btn-outline-primary:hover {
+      background-color: var(--primary);
+      color: white;
+    }
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.25rem rgba(37, 117, 252, 0.25);
+    }
+    .settings-card {
+      background: white;
+      border-radius: var(--border-radius);
+      border: 1px solid #e0e0e0;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .settings-card h5 {
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+    .form-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+  <!-- Form Builder Container -->
+  <div class="form-builder-container">
+    <div class="form-header">
+      <h1><i class="fas fa-poll me-2"></i>Create New Feedback Form</h1>
+      <p class="text-muted">Build custom forms to collect valuable feedback</p>
+    </div>
+
+    <!-- Form Settings -->
+    <div class="settings-card">
+      <h5><i class="fas fa-cog me-2"></i>Form Settings</h5>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="formTitle" class="form-label">Form Title</label>
+          <input type="text" class="form-control" id="formTitle" placeholder="e.g., Product Feedback Survey" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="formDescription" class="form-label">Description</label>
+          <input type="text" class="form-control" id="formDescription" placeholder="Optional description">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="isPublic" checked>
+            <label class="form-check-label" for="isPublic">Public Form</label>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="requiresLogin">
+            <label class="form-check-label" for="requiresLogin">Requires Login</label>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="allowMultipleResponses" checked>
+            <label class="form-check-label" for="allowMultipleResponses">Allow Multiple Responses</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Questions Container -->
+    <div id="questions-container">
+      <!-- Questions will be dynamically added here -->
+    </div>
+
+    <!-- Add Question Button -->
+    <button class="btn btn-outline-primary" onclick="addQuestion()">
+      <i class="fas fa-plus me-2"></i>Add Question
+    </button>
+
+    <!-- Form Footer -->
+    <div class="form-footer">
+      <button class="btn btn-secondary" onclick="saveForm('draft')">
+        <i class="fas fa-save me-2"></i>Save Draft
+      </button>
+      <button class="btn btn-primary" onclick="saveForm('active')">
+        <i class="fas fa-share-square me-2"></i>Publish Form
+      </button>
+    </div>
+  </div>
+
+  <!-- Share Form Link Modal -->
+  <div class="modal fade" id="shareFormModal" tabindex="-1" aria-labelledby="shareFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shareFormModalLabel"><i class="fas fa-share-alt me-2"></i>Share Your Form</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle me-2"></i>Your form is now live! Share the link below to collect responses.
+          </div>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="formLink" value="" readonly>
+            <button class="btn btn-primary" type="button" onclick="copyLink()">
+              <i class="fas fa-copy me-2"></i>Copy
+            </button>
+          </div>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="window.location.href='/dashboard'">
+            <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+
+  <!-- JavaScript for Form Builder -->
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDR3bpYN3tVSn3a-cYXlqnCSZSve8abKq0",
+      authDomain: "feedbackxpert-86d7c.firebaseapp.com",
+      projectId: "feedbackxpert-86d7c",
+      storageBucket: "feedbackxpert-86d7c.firebasestorage.app",
+      messagingSenderId: "859190774604",
+      appId: "1:859190774604:web:e225ace4e28e784d9d5de9",
+      measurementId: "G-HWMRT75G17"
+    };
+
+    // Initialize Firebase
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    let questionCount = 0;
+    let currentUser = null;
+
+    // Check auth state
+    auth.onAuthStateChanged((user) => {
+      currentUser = user;
+      if (!user) {
+        window.location.href = 'login.html';
+      }
+    });
+
+    // Function to add a new question
+    function addQuestion() {
+      questionCount++;
+      const questionsContainer = document.getElementById('questions-container');
+
+      const questionCard = document.createElement('div');
+      questionCard.className = 'question-card';
+      questionCard.id = `question-${questionCount}`;
+      questionCard.innerHTML = `
+        <div class="question-header">
+          <h5>Question ${questionCount}</h5>
+          <div class="question-actions">
+            <button onclick="moveQuestionUp(${questionCount})" title="Move up"><i class="fas fa-arrow-up"></i></button>
+            <button onclick="moveQuestionDown(${questionCount})" title="Move down"><i class="fas fa-arrow-down"></i></button>
+            <button onclick="removeQuestion(${questionCount})" title="Delete" class="text-danger"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+        <div class="form-group mb-3">
+          <label for="question-type-${questionCount}" class="form-label">Question Type</label>
+          <select class="form-control" id="question-type-${questionCount}" onchange="handleQuestionTypeChange(this)">
+            <option value="text">Text Input</option>
+            <option value="radio">Multiple Choice (Radio)</option>
+            <option value="checkbox">Checkboxes</option>
+            <option value="dropdown">Dropdown</option>
+            <option value="rating">Rating Scale</option>
+            <option value="file">File Upload</option>
+          </select>
+        </div>
+        <div class="form-group mb-3">
+          <label for="question-text-${questionCount}" class="form-label">Question Text</label>
+          <input type="text" class="form-control" id="question-text-${questionCount}" placeholder="Enter your question" required>
+        </div>
+        <div class="form-group form-check mb-3">
+          <input type="checkbox" class="form-check-input" id="mandatory-${questionCount}">
+          <label class="form-check-label" for="mandatory-${questionCount}">Required question</label>
+        </div>
+        <div id="options-container-${questionCount}"></div>
+        <div id="extra-fields-${questionCount}"></div>
+      `;
+      questionsContainer.appendChild(questionCard);
+    }
+
+    // Function to handle question type change
+    function handleQuestionTypeChange(selectElement) {
+      const questionId = selectElement.id.split('-')[2];
+      const optionsContainer = document.getElementById(`options-container-${questionId}`);
+      const extraFieldsContainer = document.getElementById(`extra-fields-${questionId}`);
+      
+      optionsContainer.innerHTML = '';
+      extraFieldsContainer.innerHTML = '';
+
+      const questionType = selectElement.value.toLowerCase().trim();
+
+      // Add options for relevant question types
+      if (['radio', 'checkbox', 'dropdown'].includes(questionType)) {
+        addOption(questionId);
+        addOption(questionId);
+        
+        const addOptionBtn = document.createElement('button');
+        addOptionBtn.className = 'btn btn-sm btn-outline-primary mt-2';
+        addOptionBtn.innerHTML = '<i class="fas fa-plus me-1"></i> Add Option';
+        addOptionBtn.onclick = () => addOption(questionId);
+        optionsContainer.appendChild(addOptionBtn);
+      }
+      
+      // Add extra fields for specific types
+      if (questionType === 'rating') {
+        extraFieldsContainer.innerHTML = `
+          <div class="row">
+            <div class="col-md-6">
+              <label for="min-${questionId}" class="form-label">Minimum Value</label>
+              <input type="number" class="form-control" id="min-${questionId}" value="1" min="1" max="10">
+            </div>
+            <div class="col-md-6">
+              <label for="max-${questionId}" class="form-label">Maximum Value</label>
+              <input type="number" class="form-control" id="max-${questionId}" value="5" min="2" max="10">
+            </div>
+          </div>
+        `;
+      } else if (questionType === 'file') {
+        extraFieldsContainer.innerHTML = `
+          <div class="form-group mb-3">
+            <label for="file-types-${questionId}" class="form-label">Allowed File Types</label>
+            <select class="form-control" id="file-types-${questionId}" multiple>
+              <option value="image/jpeg" selected>JPEG Images</option>
+              <option value="image/png" selected>PNG Images</option>
+              <option value="application/pdf" selected>PDF Documents</option>
+              <option value="application/msword">Word Documents</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="max-size-${questionId}" class="form-label">Maximum File Size (MB)</label>
+            <input type="number" class="form-control" id="max-size-${questionId}" value="5" min="1" max="20">
+          </div>
+        `;
+      }
+    }
+
+    // Function to add an option
+    function addOption(questionId) {
+      const optionsContainer = document.getElementById(`options-container-${questionId}`);
+      const optionCount = optionsContainer.querySelectorAll('.option-item').length + 1;
+
+      const optionItem = document.createElement('div');
+      optionItem.className = 'option-item';
+      optionItem.innerHTML = `
+        <input type="text" class="form-control" placeholder="Option ${optionCount}" required>
+        <button class="btn btn-sm btn-outline-danger" onclick="this.parentElement.remove()">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      optionsContainer.insertBefore(optionItem, optionsContainer.lastChild);
+    }
+
+    // Function to remove a question
+    function removeQuestion(questionId) {
+      if (confirm('Are you sure you want to delete this question?')) {
+        document.getElementById(`question-${questionId}`).remove();
+        questionCount--;
+      }
+    }
+
+    // Function to move question up
+    function moveQuestionUp(questionId) {
+      const question = document.getElementById(`question-${questionId}`);
+      const prev = question.previousElementSibling;
+      if (prev && !prev.classList.contains('settings-card')) {
+        question.parentNode.insertBefore(question, prev);
+      }
+    }
+
+    // Function to move question down
+    function moveQuestionDown(questionId) {
+      const question = document.getElementById(`question-${questionId}`);
+      const next = question.nextElementSibling;
+      if (next) {
+        question.parentNode.insertBefore(next, question);
+      }
+    }
+
+    // Function to save the form to Firestore
+    async function saveForm(status = 'active') {
+      try {
+        if (!currentUser) throw new Error('Please login to save the form');
+
+        const formTitle = document.getElementById('formTitle').value.trim();
+        const formDescription = document.getElementById('formDescription')?.value.trim() || '';
+
+        if (!formTitle || formTitle.length < 5) {
+          throw new Error('Form title must be at least 5 characters');
+        }
+
+        const questionCards = document.querySelectorAll('.question-card');
+        if (questionCards.length === 0) {
+          throw new Error('Please add at least one question to the form');
+        }
+
+        const questions = [];
+        const supportedTypes = ['text', 'radio', 'checkbox', 'dropdown', 'rating', 'file'];
+
+        questionCards.forEach((card, index) => {
+          const questionId = `q_${index}_${Date.now()}`;
+          const questionText = card.querySelector(`#question-text-${index + 1}`).value.trim();
+          const questionType = card.querySelector(`#question-type-${index + 1}`).value.toLowerCase().trim();
+          const required = card.querySelector(`#mandatory-${index + 1}`).checked || false;
+
+          if (!supportedTypes.includes(questionType)) {
+            throw new Error(`Invalid question type: ${questionType}`);
+          }
+
+          const questionData = {
+            questionId,
+            questionText,
+            questionType,
+            required
+          };
+
+          // Handle different question types
+          switch (questionType) {
+            case 'radio':
+            case 'checkbox':
+            case 'dropdown':
+              const options = [];
+              card.querySelectorAll('.option-item input').forEach(input => {
+                const value = input.value.trim();
+                if (value) options.push(value);
+              });
+              if (options.length < 2) {
+                throw new Error(`Question ${index + 1} needs at least 2 options`);
+              }
+              questionData.options = options;
+              break;
+
+            case 'rating':
+              const min = parseInt(card.querySelector(`#min-${index + 1}`).value) || 1;
+              const max = parseInt(card.querySelector(`#max-${index + 1}`).value) || 5;
+              if (min >= max) {
+                throw new Error(`Question ${index + 1} rating scale is invalid (min must be less than max)`);
+              }
+              questionData.ratingScale = { min, max };
+              break;
+
+            case 'file':
+              const fileTypes = Array.from(card.querySelector(`#file-types-${index + 1}`).selectedOptions)
+                .map(opt => opt.value);
+              const maxSize = parseInt(card.querySelector(`#max-size-${index + 1}`).value) || 5;
+              questionData.fileConfig = {
+                fileTypes: fileTypes.length > 0 ? fileTypes : ['image/jpeg', 'image/png', 'application/pdf'],
+                maxSize
+              };
+              break;
+          }
+
+          questions.push(questionData);
+        });
+
+        const isPublic = document.getElementById('isPublic').checked || false;
+        const requiresLogin = document.getElementById('requiresLogin').checked || false;
+        const allowMultipleResponses = document.getElementById('allowMultipleResponses').checked || false;
+
+        const baseUrl = window.location.hostname.includes('localhost')
+          ? 'http://localhost:5000'
+          : 'https://feedbackxpert-86d7c.web.app';
+
+        const formData = {
+          formTitle,
+          formDescription,
+          questions,
+          settings: {
+            isPublic,
+            requiresLogin,
+            allowMultipleResponses
+          },
+          ownerId: currentUser.uid,
+          status: status,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        // Save to Firestore (using 'form' collection)
+        const docRef = await db.collection('form').add(formData);
+        
+        // Update with the shareableLink (using same 'form' collection)
+        await db.collection('form').doc(docRef.id).update({
+          shareableLink: `${baseUrl}/form-view.html?formId=${docRef.id}`
+        });
+
+        // Show success message and share options for published forms
+        if (status === 'active') {
+          document.getElementById('formLink').value = `${baseUrl}/form-view.html?formId=${docRef.id}`;
+          new bootstrap.Modal(document.getElementById('shareFormModal')).show();
+        } else {
+          alert('Form saved as draft successfully!');
+          window.location.href = 'dashboard.html';
+        }
+
+      } catch (error) {
+        console.error('Error saving form:', error);
+        alert(`Error: ${error.message}`);
+      }
+    }
+
+    // Function to copy form link
+    function copyLink() {
+      const formLink = document.getElementById('formLink');
+      formLink.select();
+      formLink.setSelectionRange(0, 99999);
+      
+      try {
+        document.execCommand('copy');
+        const copyBtn = document.querySelector('#shareFormModal .btn-primary');
+        const originalHTML = copyBtn.innerHTML;
+        
+        copyBtn.innerHTML = '<i class="fas fa-check me-2"></i>Copied!';
+        copyBtn.classList.add('btn-success');
+        copyBtn.classList.remove('btn-primary');
+        
+        setTimeout(() => {
+          copyBtn.innerHTML = originalHTML;
+          copyBtn.classList.add('btn-primary');
+          copyBtn.classList.remove('btn-success');
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+        alert('Failed to copy link. Please copy it manually.');
+      }
+    }
+
+    // Initialize with one question
+    window.onload = function() {
+      addQuestion();
+    };
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

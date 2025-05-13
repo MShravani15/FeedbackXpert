@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Form</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2575fc;
+      --primary-dark: #1a5bbf;
+      --light-bg: #f8f9fa;
+      --border-radius: 8px;
+    }
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: var(--light-bg);
+    }
+    .form-container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 30px;
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    .form-header {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .form-header h1 {
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .question-card {
+      background: white;
+      border-radius: var(--border-radius);
+      border: 1px solid #e0e0e0;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+    }
+    .rating-options {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .rating-option {
+      padding: 8px 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .rating-option.selected {
+      background-color: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    .required-asterisk {
+      color: red;
+      margin-left: 5px;
+    }
+    .file-upload-info {
+      font-size: 0.9rem;
+      color: #6c757d;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <div class="form-header">
+      <h1 id="form-title">Loading Form...</h1>
+      <p class="text-muted" id="form-description"></p>
+    </div>
+
+    <form id="feedback-form">
+      <div id="questions-container"></div>
+
+      <div class="d-grid gap-2 mt-4">
+        <button type="submit" class="btn btn-primary btn-lg">
+          <i class="fas fa-paper-plane me-2"></i>Submit Feedback
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Submission Success Modal -->
+  <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Success!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle me-2"></i>Your feedback has been submitted successfully!
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDR3bpYN3tVSn3a-cYXlqnCSZSve8abKq0",
+      authDomain: "feedbackxpert-86d7c.firebaseapp.com",
+      projectId: "feedbackxpert-86d7c",
+      storageBucket: "feedbackxpert-86d7c.firebasestorage.app",
+      messagingSenderId: "859190774604",
+      appId: "1:859190774604:web:e225ace4e28e784d9d5de9",
+      measurementId: "G-HWMRT75G17"
+    };
+
+    // Initialize Firebase
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    // Get form ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const formId = urlParams.get('formId');
+    let currentForm = null;
+    let currentUser = null;
+
+    // Check auth state
+    auth.onAuthStateChanged((user) => {
+      currentUser = user;
+      if (formId) {
+        loadForm(formId);
+      } else {
+        showError('No form ID specified in URL');
+      }
+    });
+
+    // Load form from Firestore
+    async function loadForm(formId) {
+      try {
+        const doc = await db.collection('form').doc(formId).get();
+        
+        if (!doc.exists) {
+          throw new Error('Form not found');
+        }
+
+        currentForm = doc.data();
+        currentForm.id = doc.id;
+
+        // Check if form requires login
+        if (currentForm.settings.requiresLogin && !currentUser) {
+          window.location.href = `login.html?redirect=${encodeURIComponent(window.location.href)}`;
+          return;
+        }
+
+        // Display form info
+        document.getElementById('form-title').textContent = currentForm.formTitle;
+        if (currentForm.formDescription) {
+          document.getElementById('form-description').textContent = currentForm.formDescription;
+        }
+
+        // Display questions
+        renderQuestions(currentForm.questions);
+
+      } catch (error) {
+        console.error('Error loading form:', error);
+        showError(error.message);
+      }
+    }
+
+    function renderQuestions(questions) {
+      const container = document.getElementById('questions-container');
+      container.innerHTML = '';
+
+      questions.forEach((question, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.dataset.questionId = question.questionId;
+        
+        let questionHtml = `
+          <h5 class="mb-3">
+            ${index + 1}. ${question.questionText}
+            ${question.required ? '<span class="required-asterisk">*</span>' : ''}
+          </h5>
+        `;
+
+        const normalizedType = question.questionType.toLowerCase().trim();
+        
+        switch(normalizedType) {
+          case 'text':
+            questionHtml += `
+              <textarea class="form-control" name="${question.questionId}" 
+                ${question.required ? 'required' : ''} rows="3"></textarea>
+            `;
+            break;
+            
+          case 'radio':
+            questionHtml += `<div class="options-container">`;
+            question.options.forEach((option, i) => {
+              questionHtml += `
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="radio" 
+                    name="${question.questionId}" id="${question.questionId}-${i}" 
+                    value="${option}" ${question.required ? 'required' : ''}>
+                  <label class="form-check-label" for="${question.questionId}-${i}">
+                    ${option}
+                  </label>
+                </div>
+              `;
+            });
+            questionHtml += `</div>`;
+            break;
+            
+          case 'checkbox':
+            questionHtml += `<div class="options-container">`;
+            question.options.forEach((option, i) => {
+              questionHtml += `
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" 
+                    name="${question.questionId}" id="${question.questionId}-${i}" 
+                    value="${option}">
+                  <label class="form-check-label" for="${question.questionId}-${i}">
+                    ${option}
+                  </label>
+                </div>
+              `;
+            });
+            questionHtml += `</div>`;
+            break;
+            
+          case 'dropdown':
+            questionHtml += `
+              <select class="form-select" name="${question.questionId}" ${question.required ? 'required' : ''}>
+                <option value="">Select an option</option>
+                ${question.options.map(option => `
+                  <option value="${option}">${option}</option>
+                `).join('')}
+              </select>
+            `;
+            break;
+            
+          case 'rating':
+            questionHtml += `
+              <div class="rating-options">
+                ${Array.from(
+                  {length: question.ratingScale.max - question.ratingScale.min + 1}, 
+                  (_, i) => {
+                    const value = i + question.ratingScale.min;
+                    return `
+                      <div class="rating-option" data-value="${value}">${value}</div>
+                    `;
+                  }
+                ).join('')}
+              </div>
+              <input type="hidden" name="${question.questionId}" ${question.required ? 'required' : ''}>
+            `;
+            break;
+            
+          case 'file':
+            questionHtml += `
+              <input class="form-control" type="file" 
+                name="${question.questionId}" 
+                accept="${question.fileConfig.fileTypes.join(',')}"
+                ${question.required ? 'required' : ''}>
+              <div class="file-upload-info">
+                Accepted: ${question.fileConfig.fileTypes.map(t => t.split('/').pop()).join(', ')} | 
+                Max size: ${question.fileConfig.maxSize}MB
+              </div>
+            `;
+            break;
+            
+          default:
+            questionHtml += `
+              <div class="alert alert-warning">
+                Unsupported question type: ${question.questionType}
+              </div>
+            `;
+            console.error('Unsupported question type:', question.questionType);
+        }
+
+        card.innerHTML = questionHtml;
+        container.appendChild(card);
+
+        // Add rating selection handlers
+        if (normalizedType === 'rating') {
+          const options = card.querySelectorAll('.rating-option');
+          const hiddenInput = card.querySelector('input[type="hidden"]');
+          
+          options.forEach(option => {
+            option.addEventListener('click', () => {
+              options.forEach(opt => opt.classList.remove('selected'));
+              option.classList.add('selected');
+              hiddenInput.value = option.dataset.value;
+            });
+          });
+        }
+      });
+    }
+
+    function showError(message) {
+      document.getElementById('form-title').textContent = 'Error Loading Form';
+      document.getElementById('questions-container').innerHTML = `
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          ${message}
+        </div>
+      `;
+    }
+
+    // Handle form submission
+    document.getElementById('feedback-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    if (!currentUser && currentForm.settings.requiresLogin) {
+        alert('Please login to submit this form');
+        window.location.href = `login.html?redirect=${encodeURIComponent(window.location.href)}`;
+        return;
+    }
+
+    try {
+        const formData = new FormData(e.target);
+        const responses = {};
+        
+        // Collect all responses
+        currentForm.questions.forEach(question => {
+            const normalizedType = question.questionType.toLowerCase().trim();
+            
+            if (normalizedType === 'checkbox') {
+                // For checkboxes, get all checked values as array
+                responses[question.questionId] = Array.from(
+                    document.querySelectorAll(`input[name="${question.questionId}"]:checked`)
+                ).map(el => el.value);
+            } else {
+                responses[question.questionId] = formData.get(question.questionId);
+            }
+        });
+
+        // Prepare submission data
+        const submissionData = {
+            formId: currentForm.id,
+            responses,
+            submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            submittedBy: currentUser ? currentUser.uid : null,
+            userEmail: currentUser ? currentUser.email : null
+        };
+
+        // Save to Firestore
+        await db.collection('responses').add(submissionData);
+        
+        // Redirect to thank you page after successful submission
+        window.location.href = 'thank-you.html';
+        
+        // Optional: You can also pass form data to the thank you page
+        // window.location.href = `thankyou.html?formId=${currentForm.id}`;
+
+    } catch (error) {
+        console.error('Error submitting form:', error);
+        alert('Error submitting form: ' + error.message);
+    }
+});
+  </script>
+</body>
+</html>

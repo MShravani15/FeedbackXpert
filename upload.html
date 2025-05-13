@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback Analyzer | Upload</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #2b2d42;
+            --gray: #adb5bd;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: var(--dark);
+        }
+
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .container:hover {
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1);
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        h1 {
+            margin: 0 0 25px 0;
+            color: var(--dark);
+            font-size: 24px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        .upload-area {
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .file-input {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+
+        .file-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            border: 2px dashed var(--gray);
+            border-radius: 10px;
+            background-color: rgba(248, 249, 250, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-label:hover {
+            border-color: var(--primary);
+            background-color: rgba(67, 97, 238, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .file-label i {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .file-label:hover i {
+            transform: scale(1.1);
+        }
+
+        .file-label .title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--dark);
+        }
+
+        .file-label .subtitle {
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 12px;
+        }
+
+        .file-label .browse-text {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        button {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.25);
+    width: 100%;
+    max-width: 180px;
+    margin: 15px auto 0; /* This centers the button */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Optional: Add a shine effect on hover */
+button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 40%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(30deg);
+    transition: all 0.3s ease;
+}
+
+button:hover::after {
+    left: 120%;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(67, 97, 238, 0.35);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(67, 97, 238, 0.35);
+}
+
+button:disabled {
+    background: var(--gray);
+    transform: none;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+        .file-info {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--primary-dark);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: rgba(67, 97, 238, 0.08);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .file-info:hover {
+            background: rgba(67, 97, 238, 0.12);
+        }
+
+        .highlight {
+            border-color: var(--primary) !important;
+            background-color: rgba(67, 97, 238, 0.08) !important;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Feedback Data</h1>
+        
+        <form method="post" enctype="multipart/form-data" id="uploadForm">
+            <div class="upload-area">
+                <input type="file" name="file" id="file" class="file-input" accept=".xlsx,.xls" required>
+                <label for="file" class="file-label">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span class="title">Drag & drop your file</span>
+                    <span class="subtitle">or <span class="browse-text">browse</span></span>
+                    <span class="subtitle">Supports: .xlsx, .xls</span>
+                </label>
+                <div id="fileInfo" class="file-info"></div>
+            </div>
+            
+            <button type="submit" id="submitBtn" disabled>
+                <i class="fas fa-chart-pie"></i> Analyze
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file');
+        const fileInfo = document.getElementById('fileInfo');
+        const submitBtn = document.getElementById('submitBtn');
+        const form = document.getElementById('uploadForm');
+
+        fileInput.addEventListener('change', (e) => {
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                fileInfo.innerHTML = `
+                    <i class="fas fa-file-excel"></i> ${file.name} (${(file.size / 1024).toFixed(1)} KB)
+                `;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Handle drag and drop
+        const fileLabel = document.querySelector('.file-label');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            fileLabel.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            fileLabel.addEventListener(eventName, () => fileLabel.classList.add('highlight'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            fileLabel.addEventListener(eventName, () => fileLabel.classList.remove('highlight'), false);
+        });
+
+        fileLabel.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            fileInput.files = dt.files;
+            fileInput.dispatchEvent(new Event('change'));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback Analysis</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Feedback Analysis</h2>
+        <canvas id="feedbackChart" width="400" height="200"></canvas>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var ctx = document.getElementById("feedbackChart").getContext("2d");
+            var feedbackChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ["Positive", "Negative", "Neutral"],
+                    datasets: [{
+                        label: "Feedback Count",
+                        data: [30, 15, 20], // Example data
+                        backgroundColor: ["#4CAF50", "#F44336", "#FFC107"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

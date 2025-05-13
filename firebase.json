@@ -1,15 +1,43 @@
 {
   "hosting": {
-    "public": "templates",
+    "public": "client/build",
     "ignore": [
       "firebase.json",
+      ".firebaserc",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "**/venv/**",
+      "**/__pycache__/**",
+      "**/*.py",
+      "**/*.pyc",
+      "**/requirements.txt",
+      "**/server/**",
+      "**/models/**"
     ],
     "rewrites": [
       {
         "source": "**",
         "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=3600"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(jpg|jpeg|gif|png|js|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
       }
     ]
   }
